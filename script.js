@@ -53,3 +53,26 @@ function logout() {
     document.getElementById("message").innerText = "Logged Out!";
   });
 }
+db.collection("hostels").get().then((querySnapshot) => {
+
+  let html = "";
+
+  querySnapshot.forEach((doc) => {
+
+    const hostel = doc.data();
+
+    html += `
+      <div class="card">
+        <img src="${hostel.image}" width="100%">
+        <h3>${hostel.name}</h3>
+        <p>₹${hostel.price}/month</p>
+        <p>${hostel.location}</p>
+        <p>WiFi: ${hostel.wifi} | Food: ${hostel.food} | AC: ${hostel.ac}</p>
+      </div>
+    `;
+
+  });
+
+  document.getElementById("hostelList").innerHTML = html;
+
+});
