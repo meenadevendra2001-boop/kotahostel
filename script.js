@@ -60,7 +60,7 @@ db.collection("hostels").get().then((querySnapshot) => {
   querySnapshot.forEach((doc) => {
 
     const hostel = doc.data();
-
+console.log(hostel);
     html += `
   <div class="card" onclick="openHostel('${doc.id}')">
         <img src="${hostel.image}" width="100%">
