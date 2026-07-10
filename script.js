@@ -73,7 +73,11 @@ console.log(hostel);
 
   });
 
-  document.getElementById("hostelList").innerHTML = html;
+  const hostelList = document.getElementById("hostelList");
+
+if (hostelList) {
+    hostelList.innerHTML = html;
+}
 
 });
 function openHostel(id) {
@@ -91,7 +95,7 @@ function loadHostelDetails() {
   .then(doc => {
 
     const h = doc.data();
-
+if (!document.getElementById("image")) return;
     document.getElementById("image").src = h.image;
     document.getElementById("name").innerText = h.name;
     document.getElementById("location").innerText = h.location;
