@@ -62,7 +62,7 @@ db.collection("hostels").get().then((querySnapshot) => {
     const hostel = doc.data();
 
     html += `
-      <div class="card">
+  <div class="card" onclick="openHostel('${doc.id}')">
         <img src="${hostel.image}" width="100%">
         <h3>${hostel.name}</h3>
         <p>₹${hostel.price}/month</p>
@@ -76,3 +76,34 @@ db.collection("hostels").get().then((querySnapshot) => {
   document.getElementById("hostelList").innerHTML = html;
 
 });
+function openHostel(id) {
+  localStorage.setItem("hostelId", id);
+  window.location.href = "hostel.html";
+}
+
+function loadHostelDetails() {
+
+  const hostelId = localStorage.getItem("hostelId");
+
+  if (!hostelId) return;
+
+  db.collection("hostels").doc(hostelId).get()
+  .then(doc => {
+
+    const h = doc.data();
+
+    document.getElementById("image").src = h.image;
+    document.getElementById("name").innerText = h.name;
+    document.getElementById("location").innerText = h.location;
+    document.getElementById("price").innerText = h.price;
+    document.getElementById("wifi").innerText = h.wifi;
+    document.getElementById("food").innerText = h.food;
+    document.getElementById("ac").innerText = h.ac;
+
+  });
+
+}
+
+if(window.location.pathname.includes("hostel.html")){
+  loadHostelDetails();
+}
