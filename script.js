@@ -95,6 +95,7 @@ function loadHostelDetails() {
   .then(doc => {
 
     const h = doc.data();
+    console.log(h);
 if (!document.getElementById("image")) return;
     document.getElementById("image").src = h.image;
     document.getElementById("name").innerText = h.name;
