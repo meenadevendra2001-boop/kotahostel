@@ -8,82 +8,157 @@ const firebaseConfig = {
   measurementId: "G-PFXFZBG947"
 };
 
+// Firebase Initialize
 firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth();
 const db = firebase.firestore();
 
+
+// ================= REGISTER =================
+
 function register() {
+
   const name = document.getElementById("name").value;
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
   auth.createUserWithEmailAndPassword(email, password)
+
     .then((userCredential) => {
+
       return db.collection("users").doc(userCredential.user.uid).set({
+
         name: name,
         email: email,
         phone: "",
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
+
       });
+
     })
+
     .then(() => {
-      document.getElementById("message").innerText = "Registration Successful!";
+
+      document.getElementById("message").innerText =
+      "Registration Successful!";
+
     })
+
     .catch((error) => {
-      document.getElementById("message").innerText = error.message;
+
+      document.getElementById("message").innerText =
+      error.message;
+
     });
+
 }
 
+
+
+// ================= LOGIN =================
+
 function login() {
+
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
   auth.signInWithEmailAndPassword(email, password)
+
     .then(() => {
-      document.getElementById("message").innerText = "Login Successful!";
+
+      document.getElementById("message").innerText =
+      "Login Successful!";
+
     })
-    .catch(error => {
-      document.getElementById("message").innerText = error.message;
+
+    .catch((error) => {
+
+      document.getElementById("message").innerText =
+      error.message;
+
     });
+
 }
+
+
+
+// ================= LOGOUT =================
 
 function logout() {
+
   auth.signOut().then(() => {
-    document.getElementById("message").innerText = "Logged Out!";
+
+    document.getElementById("message").innerText =
+    "Logged Out!";
+
   });
+
 }
-db.collection("hostels").get().then((querySnapshot) => {
 
-  let html = "";
 
-  querySnapshot.forEach((doc) => {
 
-    const hostel = doc.data();
-console.log(hostel);
-    html += `
-  <div class="card" onclick="openHostel('${doc.id}')">
-        <img src="${hostel.image}" width="100%">
-        <h3>${hostel.name}</h3>
-        <p>₹${hostel.price}/month</p>
-        <p>${hostel.location}</p>
-        <p>WiFi: ${hostel.wifi} | Food: ${hostel.food} | AC: ${hostel.ac}</p>
-      </div>
-    `;
+// ================= LOAD HOSTELS =================
 
-  });
-
-  const hostelList = document.getElementById("hostelList");
+const hostelList = document.getElementById("hostelList");
 
 if (hostelList) {
+
+  db.collection("hostels").get()
+
+  .then((querySnapshot) => {
+
+    let html = "";
+
+    querySnapshot.forEach((doc) => {
+
+      const hostel = doc.data();
+
+      html += `
+
+      <div class="card" onclick="openHostel('${doc.id}')">
+
+      <img src="${hostel.image}" width="100%">
+
+      <h3>${hostel.name}</h3>
+
+      <p><b>Location:</b> ${hostel.location}</p>
+
+      <p><b>Price:</b> ₹${hostel.price}/month</p>
+
+      <p><b>WiFi:</b> ${hostel.wifi}</p>
+
+      <p><b>Food:</b> ${hostel.food}</p>
+
+      <p><b>AC:</b> ${hostel.ac}</p>
+
+      </div>
+
+      `;
+
+    });
+
     hostelList.innerHTML = html;
+
+  });
+
 }
 
-});
+
+
+// ================= OPEN DETAILS =================
+
 function openHostel(id) {
+
   localStorage.setItem("hostelId", id);
+
   window.location.href = "hostel.html";
+
 }
+
+
+
+// ================= DETAILS PAGE =================
 
 function loadHostelDetails() {
 
@@ -92,16 +167,22 @@ function loadHostelDetails() {
   if (!hostelId) return;
 
   db.collection("hostels").doc(hostelId).get()
-  .then(doc => {
+
+  .then((doc) => {
+
+    if (!doc.exists) {
+
+      alert("Hostel Not Found");
+
+      return;
+
+    }
 
     const h = doc.data();
-  alert(JSON.stringify(h));
-if (!document.getElementById("image")) return;
-alert(document.getElementById("location"));
+
     document.getElementById("image").src = h.image;
-    alert("Name set hone wala hai");
     document.getElementById("name").innerText = h.name;
-    document.getElementById("location").innerText = h.location || h.Location || "Not Found";
+    document.getElementById("location").innerText = h.location;
     document.getElementById("price").innerText = h.price;
     document.getElementById("wifi").innerText = h.wifi;
     document.getElementById("food").innerText = h.food;
@@ -110,6 +191,13 @@ alert(document.getElementById("location"));
   });
 
 }
-if(window.location.pathname.includes("hostel.html")){
+
+
+
+// ================= AUTO LOAD =================
+
+if (window.location.pathname.includes("hostel.html")) {
+
   loadHostelDetails();
+
 }
