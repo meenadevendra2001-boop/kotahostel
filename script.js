@@ -110,7 +110,7 @@ alert(document.getElementById("location"));
   });
 
 }
-
+//
 if(window.location.pathname.includes("hostel.html")){
   loadHostelDetails();
-}
+//}
