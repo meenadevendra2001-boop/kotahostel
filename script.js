@@ -99,6 +99,7 @@ function loadHostelDetails() {
 if (!document.getElementById("image")) return;
 alert(document.getElementById("location"));
     document.getElementById("image").src = h.image;
+    alert("Name set hone wala hai");
     document.getElementById("name").innerText = h.name;
     document.getElementById("location").innerText = h.location || h.Location || "Not Found";
     document.getElementById("price").innerText = h.price;
