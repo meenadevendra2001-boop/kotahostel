@@ -97,9 +97,10 @@ function loadHostelDetails() {
     const h = doc.data();
   alert(JSON.stringify(h));
 if (!document.getElementById("image")) return;
+alert(document.getElementById("location"));
     document.getElementById("image").src = h.image;
     document.getElementById("name").innerText = h.name;
- document.getElementById("location").innerText = h.location || h.Location || "Not Found";
+    document.getElementById("location").innerText = h.location || h.Location || "Not Found";
     document.getElementById("price").innerText = h.price;
     document.getElementById("wifi").innerText = h.wifi;
     document.getElementById("food").innerText = h.food;
