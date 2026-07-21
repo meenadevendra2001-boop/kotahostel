@@ -179,6 +179,7 @@ function loadHostelDetails() {
     }
 
     const h = doc.data();
+    alert(JSON.stringify(h));
     alert(h.location);
 
     document.getElementById("image").src = h.image;
